@@ -1,0 +1,6 @@
+[book]
+authors = ["Erik Bremen"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Crafting Marwood"
