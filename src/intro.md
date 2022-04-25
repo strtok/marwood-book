@@ -18,15 +18,15 @@ The simplicity of scheme allows the implementer to spend more time exploring com
 
 When researching scheme implementation material I came across two types of sources:
 
-1. Academic material dating back to the 1970s. This material is quite abstract and a majority of these papers and books describe imeplementing a metacircular evaluator. There are very few materials on implementing scheme in a language like C or Rust.
+1. Academic material dating back to the 1970s. This material is quite abstract and a majority of these papers and books describe implementing a metacircular evaluator. There are very few materials on implementing scheme in a language like C or Rust.
    
-2. Modern scheme codebases such as Chez Scheme, Guile, Chicken, Chibi. These implementations have the best performance, but composed of millions of lines of code over years of implementation from dozens of developers.
+2. Modern scheme codebases such as Chez Scheme, Guile, Chicken, Chibi. These implementations have the best performance, but are composed of millions of lines of code over years of implementation from dozens of developers. 
 
-It is difficult to find an implementation of scheme that sits pragmatically between educational and real. 
+Marwood's goal was to provide an example of an implemenation of scheme that fits somewhere between #1 and #2.
 
 ## Resources
 
-These are the resources that I found useful when writing Marwood:
+These resources were found useful when researching scheme implementations:
 
 - [Scheme Bibliography Github](https://github.com/schemedoc/bibliography)
 - [Three Implementation Models for Scheme - Kent Dybvig](https://dl.acm.org/doi/10.5555/37555)
