@@ -1,4 +1,4 @@
-name: Setup mdBook with plugins (latest)
+name: Deploy mdBook
 on:
   push:
     branches:
