@@ -39,7 +39,7 @@ When researching scheme implementation material I came across two types of sourc
 
 Marwood's goal was to provide an example of an implemenation of scheme that fits somewhere between #1 and #2.
 
-## Resources
+## Resources and Influences
 
 These resources were found useful when researching scheme implementations:
 
