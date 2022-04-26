@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: jontze/action-mdbook@v1
         with:
-          token: ${{secrets.ACTION_DEPLOY_KEY}}
+          token: ${{secrets.GITHUB_TOKEN}}
           mdbook-version: "~0.4.18"
           use-mermaid: true
           mermaid-version: "~0.10.0"
