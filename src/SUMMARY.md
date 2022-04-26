@@ -1,7 +1,6 @@
 # Marwood
 
 [Marwood](./title-page.md)
-[Introduction](./intro.md)
 
 ## Design Overview
 - [Design Overview](./ch01-00-design-overview.md)
