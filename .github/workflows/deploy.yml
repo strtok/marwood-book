@@ -1,0 +1,23 @@
+name: Setup mdBook with plugins (latest)
+on:
+  push:
+    branches:
+      - master
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: jontze/action-mdbook@v1
+        with:
+          token: ${{secrets.ACTIONS_DEPLOY_KEY}}
+          mdbook-version: "~0.4.18"
+          use-mermaid: true
+          mermaid-version: "0.10.0"
+          use-linkcheck: false
+          use-toc: false
+          use-opengh: false
+      - name: Show mdbook version
+        run: mdbook --version
+      - name: Show mermaid version
+        run: mdbook-mermaid --version
