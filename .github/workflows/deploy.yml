@@ -24,7 +24,7 @@ jobs:
       - name: Build Book
         run: mdbook build
       - name: Make CNAME
-        run: echo book.marwood.io > CNAME
+        run: echo book.marwood.io > book/CNAME
       - name: Deploy to gh-pages
         if: success()
         uses: peaceiris/actions-gh-pages@v3
