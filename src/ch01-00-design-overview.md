@@ -26,7 +26,7 @@ Marwood uses a custom virtual machine approach.
 
 ## Marwood Library
 
-At Marwood's core is a library that provides the creation of scheme virtual machines. The virtual machines represent a global environment, and may be used to evaluate scheme expressions.
+The Marwood library allows the creation of Scheme virtual machines, which may be used to evaluate scheme expressions. Each virtual machine represents the state of a scheme environment (global environment, heap, stack, etc).
 
 Here's an example demonstrating creation of a recursive factorial procedure, and evaluation of `(factorial n)` for n in 0..10:
 
@@ -69,11 +69,11 @@ the factorial of 9 is 362880
 
 ## A breakdown of Marwood's Components
 
-The remainder of this text dives into the detail of all of the components that make up Marwood's library:
+The remainder of this text describes the design decisions behind each of Marwood's major library components:
 
-* A [parser] and [tokenizer] used to create Marwood's AST [cell] object. This object acts as both input to the VM's eval() function, and also the result of an evaluation. The tokenizer is also useful in other situations, such as repl bracket matching and syntax hilighting.
+* A [parser] and [tokenizer] used to create Marwood's AST [cell] object. This object acts as both input to the VM's `eval()` function, and also the result of an evaluation. Marwood's tokenizer is also useful in other situations, such as providing input to REPL syntax highlighting and bracket matching.
   
-* A [virtual machine] that represents a scheme environment and may be used to execute scheme. The VM may be used to evaluate a `Cell` produced by Marwood's parser (or created manually). Successful evaluation results in an output `Cell`, that represents the result of the evaluation.
+* A [virtual machine] that represents a scheme environment and may be used to execute scheme. The VM may be used to evaluate a `Cell` produced by Marwood's parser. Successful evaluation results in an output `Cell`, that represents the result of the evaluation. 
 
 * A [compiler] that given a `Cell` and a `VM`, constructs compiled bytecode to be executed on the VM.
 
@@ -81,7 +81,7 @@ The remainder of this text dives into the detail of all of the components that m
 
 * The [repl] and [web-repl] crates. These creates are separate from the main Marwood library crates, and provide example implementations of REPLs that use the Marwood library.
 
-This diagram illustrates how a read-eval-print loop may look with Marwood. Text is read from the readline library, tokenized, parsed, evaluated and then the resulting `Cell` object is printed back to the user.
+This diagram illustrates a Marwood read-eval-print loop. Text is read from the readline library, tokenized, parsed, evaluated and then the resulting `Cell` object is printed back to the user.
 
 The VM object maintains any state expected by the user between evaluations. For example, if the user enters `(define x 10)`, then on evaluation the VM object will modify its heap to represent the new binding for x.
 
@@ -93,4 +93,4 @@ flowchart LR
     D -->|Cell| A
 ```
 
-The remaining sections of this text describe in detail how these different components were built.
+The remaining sections of this text describe in detail how these different components were designed.
