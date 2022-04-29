@@ -11,9 +11,6 @@ Here's an example demonstrating creation of a recursive factorial procedure, and
 
 ```rust,noplayground
 use marwood::vm::Vm;
-use marwood::{lex, parse};
-
-extern crate marwood;
 
 fn main() {
     let mut vm = Vm::new();
@@ -24,13 +21,12 @@ fn main() {
                    acc
                    (factorial (- n 1) (* acc n)))))
     "#;
-    vm.eval(&parse!(code)).unwrap();
+
+    vm.eval_text(&code).unwrap();
+
     for it in 0..10 {
-        println!(
-            "the factorial of {} is {}",
-            it,
-            vm.eval(&parse!(&format!("(factorial {})", it))).unwrap()
-        );
+        let (cell, _) = vm.eval_text(&format!("(factorial {})", it)).unwrap();
+        println!("the factorial of {} is {}", it, cell);
     }
 }
 ```
