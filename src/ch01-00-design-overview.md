@@ -59,18 +59,22 @@ The remainder of this text dives into the detail of all of the components that m
   
 * A [virtual machine] that represents a scheme environment and may be used to execute scheme. The VM may be used to evaluate a `Cell` produced by Marwood's parser (or created manually). Successful evaluation results in an output `Cell`, that represents the result of the evaluation.
 
-    This diagram illustrates the relationship between Marwood's REPL, parser and VM:
-
-```mermaid
-flowchart LR
-    A(REPL) -->|Text| B(Tokenizer)
-    B -->|Token Stream| C(Parser)
-    C -->|Cell| D(VM)
-    D -->|Cell| A
-```
-
 * A [compiler] that given a `Cell` and a `VM`, constructs compiled bytecode to be executed on the VM.
 
 * Numerous [built-in] Scheme library procedures written in rust, and a scheme [prelude] containing library procedures written in scheme.
 
 * The [repl] and [web-repl] crates. These creates are separate from the main Marwood library crates, and provide example implementations of REPLs that use the Marwood library.
+
+This diagram illustrates how a read-eval-print loop may look with Marwood. Text is read from the readline library, tokenized, parsed, evaluated and then the resulting `Cell` object is printed back to the user.
+
+The VM object maintains any state expected by the user between evaluations. For example, if the user enters `(define x 10)`, then on evaluation the VM object will modify its heap to represent the new binding for x.
+
+```mermaid
+flowchart LR
+    A(Readline) -->|Text| B(Tokenizer)
+    B -->|Token Stream| C(Parser)
+    C -->|Cell| D(VM)
+    D -->|Cell| A
+```
+
+The remaining sections of this text describe in detail how these different components were built.
