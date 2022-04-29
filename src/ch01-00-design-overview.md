@@ -7,15 +7,18 @@
 [tokenizer]: https://github.com/strtok/marwood/blob/master/marwood/src/lex.rs
 [virtual machine]: https://github.com/strtok/marwood/blob/master/marwood/src/vm/mod.rs
 [web-repl]: https://github.com/strtok/marwood/tree/master/marwood-wasm
-[An Incremental Approach to Compiler Construction](http://scheme2006.cs.uchicago.edu/11-ghuloum.pdf)
+[An Incremental Approach to Compiler Construction]: http://scheme2006.cs.uchicago.edu/11-ghuloum.pdf
+[sicp]: https://sicp.sourceacademy.org
 
 ## Highlevel Design Choices
 
-The first major decision when constructing Marwood is to decide what target architecture (if any) Marwood would be compiled for:
+The first major decision when constructing Marwood was to decide how Marwood would evaluate scheme:
 
-1. *Direct evaluation of the AST*: This is what Marwood would be like if Marwood's parser output (`Cell`) was directly evaluated in Rust, relying on the Rust stack and heap. This is the most natural way to attempt to write an interpreter for Scheme, but it has a few short-comings. Certain features like tail-call optimization and call/cc may be more difficult to implement depending on the host language, and other considerations like memory management are directly affected by the host language.
+1. *Direct evaluation of the AST in the host language*: This is the most natural way to attempt to write an interpreter for Scheme, but it has a few short-comings. Certain features like tail-call optimization and call/cc may be more difficult to implement depending on the host language, and other considerations like memory management are directly affected by the host language. 
+
+    This approach makes a lot of sense if the host language is Scheme, however. There are numerous texts (e.g. [sicp]) on writing meta-circular evaluators in Scheme, and it is one of the many brilliant examples of Scheme's elegant design.
   
-2. *Compilation to an existing target architecture*: The target architecture could be hardware based (e.g. x86, amd64, arm) such as in [An Incremental Approach to Compiler Construction], or virtual (JVM, WASM, etc). This option 
+2. *Compilation to an existing target architecture*: The target architecture could be hardware based (e.g. x86, amd64, arm) such as in [An Incremental Approach to Compiler Construction], or virtual (JVM, WASM, etc).
 
 3. *Compilation to a custom virtual machine*: A custom virtual machine is created designed to evaluate Scheme.
 
