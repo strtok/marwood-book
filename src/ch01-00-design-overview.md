@@ -10,6 +10,8 @@
 [An Incremental Approach to Compiler Construction]: http://scheme2006.cs.uchicago.edu/11-ghuloum.pdf
 [sicp]: https://sicp.sourceacademy.org
 
+# Design Overview
+
 ## Highlevel Design Choices
 
 The first major decision when constructing Marwood was to decide how Marwood would evaluate scheme:
