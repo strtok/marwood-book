@@ -31,4 +31,5 @@ These resources were found useful when researching scheme implementations:
 - [Scheme Bibliography Github](https://github.com/schemedoc/bibliography)
 - [Three Implementation Models for Scheme - Kent Dybvig](https://dl.acm.org/doi/10.5555/37555)
 - [An Incremental Approach to Compiler Construction](http://scheme2006.cs.uchicago.edu/11-ghuloum.pdf)
+- [Crafting Interpreters](https://craftinginterpreters.com)
 - [LISP System Implementation - Nils Holm](http://t3x.org/lsi/index.html)
