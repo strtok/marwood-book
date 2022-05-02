@@ -3,11 +3,11 @@
 [lexer]: https://github.com/strtok/marwood/blob/master/marwood/src/lex.rs
 [sexpr]: https://en.wikipedia.org/wiki/S-expression
 
-## Cell
+# Cell
 
-[Cell] is the enum type that represents Scheme sexpr's in Rust. It is the main input to Marwood's compiler, macro transformers, and printer, and is the output of Marwood's VM as a result of evaluating scheme.
+[Cell] is the enum type that represents Scheme data and code in Rust. It is the main input to Marwood's compiler, macro transformers, and printer, and is the output of Marwood's VM as a result of evaluating scheme.
 
-Cell is an enum. Most of the variants represent `atom` types in Scheme, such as boolean values, numbers, characters, and strings:
+Cell is an enum type in Rust. Most of the variants represent `atom` types in Scheme, such as booleans, numbers, characters, and strings:
 
 ```rust,noplayground
 pub enum Cell {
@@ -22,6 +22,8 @@ pub enum Cell {
 
 As an example, parsing the scheme expression `#f` would result in Marwood's parser outputting the value `Cell::Bool(false)`.
 
+## Aggregate Types
+
 Cell also contains a few variants that provide aggregate types support for scheme pairs, lists and vectors:
 
 ```rust,noplayground
@@ -35,6 +37,8 @@ pub enum Cell {
 `Pair` is a pair of Cells representing the `car` and `cdr` parts of a cons pair. This structure can be used to represent pairs in scheme, which in turn may be used to represent lists. This is the main building block for representing Scheme code's tree structure in Rust.
 
 `Vector` represents a scheme vector, such as `#(10 20 30)`.
+
+## Special Variants
 
 The Cell enum also contains a few variants that can only be produced as output of Marwood's evaluator. For example, the `Cell::Void` variant is produced by some Marwood procedures that evaluate to `#<void>` (e.g. define, set!). It is not possible to produce these variants via Marwood's parser.
 
