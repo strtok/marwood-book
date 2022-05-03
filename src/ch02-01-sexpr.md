@@ -4,7 +4,7 @@
 
 When designing a scheme parser, we first have to think a little bit about how to represent Scheme expressions in Rust's type system.
 
-Fortunately, Lisp set a precedent by designing the language so that data and code are interchangible and can be represented by a data structure called an S-expression or [sexpr].
+Fortunately Scheme's source code is already representable in a data structure called an S-expression (or [sexpr]). This is one of the fundamental properties of a lisp: source code is data.
 
 A sexpr can be thought of as an aggregate type that can represent one of two things:
 
