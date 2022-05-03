@@ -24,3 +24,30 @@ flowchart TD
     C -->|car| 3((3))
     C -->|cdr| nil((nil))
 ```
+
+## Improper Lists
+
+The expression `(1 2 . 3)` is an example of an *improper list, a list not terminated with '(). It relies on special use of a dot preceding the very last element in a list. This list could also be written as `(1 . (2 . 3))`.
+
+```mermaid
+flowchart TD
+    A(( )) -->|car| +((+))
+    A -->|cdr| B(( ))
+    B -->|car| 2((2))
+    B -->|cdr| 3((3))
+```
+
+Improper lists are less common in Scheme, but there are a few parts of R7Rs, such as variable argument support, that rely on improper lists.
+
+Examples of improper lists are:
+
+```scheme
+'(1 2 3 4 5 6 7 8 9 . 10)
+'((10 10) (20 20) . (/ 30 30))
+```
+
+This example is invalid scheme because there are two expressions after the dot:
+
+```scheme
+'(1 2 . 3 4)
+```
