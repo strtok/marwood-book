@@ -7,6 +7,7 @@
 
 ## Abstract Syntax
 - [Parsing & Printing](./ch02-00.md)
-  - [Cell](./ch02-01-cell.md)
-  - [Lexing](./ch02-02-lex.md)
-  - [Parsing](./ch02-03-parse.md)
+  - [S-Expressions](./ch02-01-sexpr.md)
+  - [Cell](./ch02-02-cell.md)
+  - [Lexing](./ch02-03-lex.md)
+  - [Parsing](./ch02-04-parse.md)
