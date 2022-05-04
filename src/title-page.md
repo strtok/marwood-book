@@ -39,6 +39,12 @@ When researching scheme implementation material I came across two types of sourc
 
 Marwood's goal was to provide an example of an implemenation of scheme that fits somewhere between #1 and #2.
 
+## Who is this book for?
+
+This book is walkthrough through Marwood's source code. It is aimed at an audience with some experience with the Rust programming language, parsers, and compilers.
+
+For a detailed tutorial series on writing an interpreter, I would recommend [Crafting Interpreters](https://craftinginterpreters.com).
+
 ## Resources and Influences
 
 These resources were found useful when researching scheme implementations:
@@ -46,4 +52,5 @@ These resources were found useful when researching scheme implementations:
 - [Scheme Bibliography Github](https://github.com/schemedoc/bibliography)
 - [Three Implementation Models for Scheme - Kent Dybvig](https://dl.acm.org/doi/10.5555/37555)
 - [An Incremental Approach to Compiler Construction](http://scheme2006.cs.uchicago.edu/11-ghuloum.pdf)
+- [Crafting Interpreters](https://craftinginterpreters.com)
 - [LISP System Implementation - Nils Holm](http://t3x.org/lsi/index.html)

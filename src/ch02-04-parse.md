@@ -7,7 +7,7 @@
 
 ### The Parse Function
 
-Marwood's parser is a direct consume of `Vec<Token>` returned by the lexer.
+Marwood's parser is a direct consumer of `Vec<Token>` returned by the lexer.
 
 `parse::parse()` takes an iterator over `&Token`, the original source &str that was supplied to `lex::scan`, and returns a `Cell`.
 
@@ -30,6 +30,22 @@ For example, this scheme source contains five expressions and would require five
 ### Recursive Descent Parser
 
 
+
+
 ### Error::Incomplete
 
 Similarly to scan, parse() will return Error::Incomplete if the token stream does not contain a complete expression.
+
+Some examples of incomplete expressions:
+
+```scheme
+'(1 2 3
+```
+
+```scheme
+'(1 2 3)'(4 5
+```
+
+```scheme
+#(1 2 3)
+```
