@@ -27,11 +27,6 @@ For example, this scheme source contains five expressions and would require five
 (+ 1 2)(+ 3 4)
 ```
 
-### Recursive Descent Parser
-
-
-
-
 ### Error::Incomplete
 
 Similarly to scan, parse() will return Error::Incomplete if the token stream does not contain a complete expression.
