@@ -7,6 +7,8 @@
 
 Marwood has a stack based virtual machine represented by the `Vm` object. Each Vm object represents a scheme runtime environment, each with a stack, heap and global environment.
 
+Scheme expressions evaluated on the VM are compiled into byte code represented by [op codes], which are evaluated by the VM.
+
 ```rust,noplayground
 #[derive(Debug)]
 pub struct Vm {
@@ -61,7 +63,7 @@ The %ip register contains a tuple that points to the currently running block of 
 
 The %bp, %sp and %ep registers maintain state of Marwood's stack and call frame state.
 
-## Instructions
+## Op Codes
 
 Marwood's instruction set is built specifically for executing scheme. It's not a general purpose virtual machine. 
 
