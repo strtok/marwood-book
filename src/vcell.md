@@ -44,9 +44,9 @@ Representing this relationship with Marwood's existing `Cell` data structure wou
 
 The `VCell` type is how Marwood represents scheme at runtime. It's also used to represent other runtime objects, such as VM op codes, registers, and even lexical environments. Marwood's stack and heaps are just vectors of VCell. It is the universal type!
 
-Instead of a pair being represented by `(Box<Cell>, Box<Cell>)`, it is not represented by `(usize, usize)`, each usize corresponding to the locations of the `car` and `cdr` portions on the heap. This is explored further in the section on Marwood's heap.
+Instead of a pair being represented by `(Box<Cell>, Box<Cell>)`, a VCell pair is represented by `(usize, usize)`, each usize corresponding to the locations of the `car` and `cdr` portions on the heap. This is explored further in the section on Marwood's heap.
 
-```rust
+```rust,noplayground
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum VCell {
     Bool(bool),
@@ -62,3 +62,33 @@ pub enum VCell {
 ```
 
 >**Note:** Marwood's VCell enum is kept a maximum of 24 bytes. 8 bytes represent the enum tag, and an additional 16 bytes  remain for data. Any VCell variants that may exceed this size are boxed with `Rc`, though the most common types fit well within this limit.
+
+# VCell > Scheme
+
+VCell's primary role is to represent scheme data in Marwood's VM, but it's also used to represent Marwood's internal instruction format (byte code) and values on Marwood's stack, heap, global and lexical environments. The remaining VCell variants are used to represent the various types that may be encountered.
+
+```rust,noplayground
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum VCell {
+    ...
+
+    Continuation(Rc<Continuation>),
+    Closure(usize, usize),
+    Lambda(Rc<Lambda>),
+    LexicalEnv(Rc<LexicalEnvironment>),
+    LexicalEnvSlot(usize),
+    LexicalEnvPtr(usize, usize),
+    Macro(Rc<Transform>),
+
+    Acc,
+    ArgumentCount(usize),
+    BasePointer(usize),
+    BasePointerOffset(i64),
+    BuiltInProc(Rc<BuiltInProc>),
+    EnvironmentPointer(usize),
+    GlobalEnvSlot(usize),
+    InstructionPointer(usize, usize),
+    OpCode(OpCode),
+    Ptr(usize),
+}
+```
