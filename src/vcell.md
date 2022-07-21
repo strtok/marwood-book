@@ -62,6 +62,8 @@ pub enum VCell {
 ```
 
 >**Note:** Marwood's VCell enum is kept a maximum of 24 bytes. 8 bytes represent the enum tag, and an additional 16 bytes  remain for data. Any VCell variants that may exceed this size are boxed with `Rc`, though the most common types fit well within this limit.
+> Keeping VCell as small as possible has the benefit that it may be trivially cloneable, which comes in handy when encountering any borrow checker related issues with reading VCell values from Marwood's heap and stack.
+
 
 # VCell > Scheme
 
