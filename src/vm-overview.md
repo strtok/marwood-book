@@ -5,7 +5,7 @@
 
 # Virtual Machine
 
-Marwood has a stack based virtual machine represented by the `Vm` object. Each Vm object represents a scheme runtime environment, each with a stack, heap and global environment.
+Marwood has a stack based virtual machine represented by the `Vm` object. Each Vm object represents a full scheme runtime environment, each with a stack, heap and global environment.
 
 Scheme expressions evaluated on the VM are compiled into byte code represented by [op codes], which are evaluated by the VM.
 
@@ -36,7 +36,7 @@ The `Vm` object provides an eval interface for evaluating scheme expressions, an
 fn eval(&mut self, cell: &Cell) -> Result<Cell, Error>
 ```
 
-## Components
+## VM Components
 
 The `Vm` is composed of these high-level components, which are explored later in this chapter:
 
@@ -57,11 +57,11 @@ The Vm has a handful of registers that are used to maintain currently running pr
 | %sp      | Stack Pointer       |
 | %ep      | Environment Pointer |
 
-The %acc (or accumulator) register contains the result of any Vm instruction that produces a result The %acc register is also used by procedures to store the result of applying a procedure. For example, the procedure `(+ 10 10)` would result in %acc containing the result `20`.
+The %acc (or accumulator) register contains the result of any Vm instruction that produces a result. The %acc register is also used by procedures to store the result of procedure application. For example, the procedure `(+ 10 10)` would result in %acc containing the result `20`.
 
-The %ip register contains a tuple that points to the currently running block of bytecode, and the next instruction to execute.
+The %ip register contains a tuple that points to the currently running block of bytecode, and offset in the bytecode of the next instruction to be executed.
 
-The %bp, %sp and %ep registers maintain state of Marwood's stack and call frame state.
+The %bp, %sp and %ep registers maintain state of Marwood's stack and call frame state and are discussed in detail in the procedure application section.
 
 ## Op Codes
 
