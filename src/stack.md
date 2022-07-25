@@ -20,7 +20,7 @@ Here's an example stack during evaluation of the expression `(+ 10 5)`, with the
 
 # Stack Structure
 
-Marwood's stack is backed by a Rust `Vec<VCell>`, and the stack pointer `sp` which contains the index of the current top of the stack in the stack vector. Operations such as push and pop are provided by the Rust's vector type.
+Marwood's stack is backed by a Rust `Vec<VCell>`, and the stack pointer `sp` which contains the index of the current top of the stack in the stack vector. Operations such as push and pop are backed by the rust Vector's implementation of push and pop.
 
 ```rust,noplayground
 pub struct Stack {
@@ -31,6 +31,24 @@ pub struct Stack {
     /// This value backs the SP register of the VM
     sp: usize,
 }
+```
+
+Stack manipulation is provided by push and pop functions:
+
+```rust,noplayground
+    pub fn push<T: Into<VCell> + Display>(&mut self, vcell: T)
+    pub fn pop(&mut self) -> Result<&VCell, Error>
+
+```
+
+Access to values values on the stack are provided by either direct index into the stack, or offset relative to the current stack pointer:
+
+```rust, noplayground
+
+    pub fn get(&self, index: usize) -> Result<&VCell, Error>
+    pub fn get_mut(&mut self, index: usize) -> Result<&mut VCell, Error>
+    pub fn get_offset(&self, offset: i64) -> Result<&VCell, Error> {
+    pub fn get_offset_mut(&mut self, offset: i64) -> Result<&mut VCell, Error>
 ```
 
 >#### Stack Growth
