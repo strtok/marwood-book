@@ -5,7 +5,7 @@
 
 # Virtual Machine
 
-Marwood has a stack based virtual machine represented by the `Vm` object. Each Vm object represents a full scheme runtime environment, each with a stack, heap and global environment.
+Marwood has a stack based virtual machine represented by the `Vm` object. Each Vm represents a full scheme runtime environment.
 
 Scheme expressions evaluated on the VM are compiled into byte code represented by [op codes], which are evaluated by the VM.
 
