@@ -124,6 +124,43 @@ The function `get` acts as a wrapper around `get_at_index` and only performs a h
 
 # Put
 
+The `put` function puts the supplied vcell on the next available slot on the heap returned by `alloc`. If vcell was already a pointer type, then it's returned instead of being double boxed by the heap. This removes the need for a lot of boxing code in Marwood to check if the value it's boxing is already boxed.
 
+```rust,noplayground
+    pub fn put<T: Into<VCell> + Clone>(&mut self, vcell: T) -> VCell {
+        let vcell = vcell.into();
+        match &vcell {
+            VCell::Ptr(_) => vcell,
+            VCell::Symbol(sym) => match self.symbol_table.get(sym.deref()) {
+                Some(ptr) => VCell::ptr(*ptr),
+                None => {
+                    let ptr = self.alloc();
+                    *self.heap.get_mut(ptr)
+                        .expect("heap index is out of bounds") = vcell.clone();
+                    self.symbol_table.insert(sym.deref().into(), ptr);
+                    VCell::ptr(ptr)
+                }
+            },
+            vcell => {
+                let ptr = self.alloc();
+                *self.heap.get_mut(ptr)
+                    .expect("heap index is out of bounds") = vcell.clone();
+                VCell::Ptr(ptr)
+            }
+        }
+    }
+```
 
-# Symbol Interning
+> #### Symbol Interning
+> The heap provides symbol interning by use of Heap::symbol_table. On put of a symbol, the heap will check if the symbol already exists in the symbol table and will return the stored heap location if the symbol already exists.
+> This results in the same symbols always having the same heap location in Marwood.
+> Why is this useful? This allows various parts of Marwood to refer to symbols by their heap reference instead of the string.
+
+The `maybe_put` function acts as a wrapper around `put`, and will only put a VCell value if the value is one that must be boxed on a heap. Atom values such as numbers, bool, nil, etc are immutable values that may not always need to be boxed.
+
+```rust,noplayground
+    pub fn maybe_put<T: Into<VCell> + Clone>(&mut self, vcell: T) -> VCell
+```
+
+# Put & Get Cell
+
