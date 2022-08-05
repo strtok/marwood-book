@@ -164,3 +164,31 @@ The `maybe_put` function acts as a wrapper around `put`, and will only put a VCe
 
 # Put & Get Cell
 
+The `put_cell` and `maybe_put_cell` are versions of `put` and `maybe_put` that recursively place a `Cell` structure on the heap. Aggregate structures such as pairs and vectors may end up allocating multiple heap slots to represent the structure in the heap.
+
+```rust,noplayground
+    pub fn put_cell(&mut self, ast: &cell::Cell) -> VCell
+    pub fn maybe_put_cell(&mut self, ast: &cell::Cell) -> VCell
+```
+
+The following call to put_cell ends up allocating 10 slots on the heap to create the list structure and storage for values:
+
+```rust,noplayground
+    let mut heap = Heap::new(8192);
+    heap.put_cell(&parse!("(puppies 42.0 cats puppies #t)"));
+```
+
+The chart below contains the resulting heap allocations for the storage of this list in the heap. Note that because puppies is an interned symbol at position $00 in the heap, both pairs that reference the value puppy point to the same heap position of $00.
+
+| Slot | Value                   |
+|------|-------------------------|
+| 0    | Symbol(puppies)         |
+| 1    | Float(42.0)             |
+| 2    | Symbol(cats)            |
+| 3    | #t                      |
+| 4    | ()                      |
+| 5    | ($03 . $04)             |
+| 6    | ($00 . $05)             |
+| 7    | ($02 . $06)             |
+| 8    | ($01 . $07)             |
+| 9    | ($00 . $08)             |
