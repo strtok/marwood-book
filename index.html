@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Marwood - Crafting Marwood</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html" class="active">Marwood</a></li><li class="chapter-item expanded "><a href="design-overview.html"><strong aria-hidden="true">1.</strong> Design Overview</a></li><li class="chapter-item expanded "><a href="parsing-printing-overview.html"><strong aria-hidden="true">2.</strong> Parsing & Printing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="sexpr.html"><strong aria-hidden="true">2.1.</strong> S-Expressions</a></li><li class="chapter-item expanded "><a href="cell.html"><strong aria-hidden="true">2.2.</strong> Cell</a></li><li class="chapter-item expanded "><a href="tokenizing.html"><strong aria-hidden="true">2.3.</strong> Tokenizing</a></li><li class="chapter-item expanded "><a href="parsing.html"><strong aria-hidden="true">2.4.</strong> Parsing</a></li></ol></li><li class="chapter-item expanded "><a href="vm-overview.html"><strong aria-hidden="true">3.</strong> Virtual Machine</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="vcell.html"><strong aria-hidden="true">3.1.</strong> VCell</a></li><li class="chapter-item expanded "><a href="stack.html"><strong aria-hidden="true">3.2.</strong> Stack</a></li><li class="chapter-item expanded "><a href="heap.html"><strong aria-hidden="true">3.3.</strong> Heap</a></li><li class="chapter-item expanded "><a href="global-environment.html"><strong aria-hidden="true">3.4.</strong> Global Environment</a></li></ol></li><li class="chapter-item expanded "><a href="numbers.html"><strong aria-hidden="true">4.</strong> Numbers</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Crafting Marwood</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="crafting-marwood"><a class="header" href="#crafting-marwood">Crafting Marwood</a></h1>
+<p><em>by Erik Bremen</em></p>
+<p>This book is built with <a href="https://github.com/rust-lang/mdBook">mdBook</a> and <a href="https://mermaid-js.github.io">Mermaid-JS</a>. Its source may be found at <a href="https://github.com/strtok/marwood-book">marwood-book</a>.</p>
+<h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>Crafting Marwood is a book describing the process behind researching and building Marwood, a Scheme compiler and runtime written in Rust. Marwood may be interacted with on the web at <a href="https://repl.marwood.io">repl.marwood.io</a>, and its source is MIT Licensed and may be found on <a href="https://github.com/strtok/marwood">github</a>.</p>
+<h2 id="what-is-scheme"><a class="header" href="#what-is-scheme">What is Scheme?</a></h2>
+<p>Scheme is a programming language invented in 1975 by Guy Steel and Gerald Jay Sussman at MIT. It's the first dialect of lisp to use lexical scope, and its simplicity makes it a great choice for hobby programming language implementers.</p>
+<p>Here's a sample of scheme's syntax, demonstrating a recursive implementation of factorial:</p>
+<pre><code class="language-scheme">(define (factorial n)
+    (if (= n 0) 
+        1
+        (* n (factorial (- n 1)))))
+</code></pre>
+<h2 id="why-scheme"><a class="header" href="#why-scheme">Why Scheme?</a></h2>
+<p>Scheme has very simple grammar, and small number of core language features that once implemented provide the building blocks for the rest of the implementation.</p>
+<p><a href="https://small.r7rs.org">R7Small</a>, the latest standard at the time of writing, was published in 2013 and is just under 90 pages of text including full library specification and appendix.</p>
+<p>The simplicity of scheme allows the implementer to spend more time exploring complex branches of programming language implementations, such as garbage collection, macro expansion, optimizations, etc.</p>
+<h2 id="how-is-marwood-different"><a class="header" href="#how-is-marwood-different">How is Marwood different?</a></h2>
+<p>When researching scheme implementation material I came across two types of sources:</p>
+<ol>
+<li>
+<p>Academic material dating back to the 1970s. This material is quite abstract and a majority of these papers and books describe implementing a metacircular evaluator. There are very few materials on implementing scheme in a language like C or Rust.</p>
+</li>
+<li>
+<p>Modern scheme codebases such as Chez Scheme, Guile, Chicken, Chibi. These implementations have the best performance, but are composed of millions of lines of code over years of implementation from dozens of developers. </p>
+</li>
+</ol>
+<p>Marwood's goal was to provide an example of an implemenation of scheme that fits somewhere between #1 and #2.</p>
+<h2 id="who-is-this-book-for"><a class="header" href="#who-is-this-book-for">Who is this book for?</a></h2>
+<p>This book is walkthrough through Marwood's source code. It is aimed at an audience with some experience with the Rust programming language, parsers, and compilers.</p>
+<p>For a detailed tutorial series on writing an interpreter, I would recommend <a href="https://craftinginterpreters.com">Crafting Interpreters</a>.</p>
+<h2 id="resources-and-influences"><a class="header" href="#resources-and-influences">Resources and Influences</a></h2>
+<p>These resources were found useful when researching scheme implementations:</p>
+<ul>
+<li><a href="https://github.com/schemedoc/bibliography">Scheme Bibliography Github</a></li>
+<li><a href="https://dl.acm.org/doi/10.5555/37555">Three Implementation Models for Scheme - Kent Dybvig</a></li>
+<li><a href="http://scheme2006.cs.uchicago.edu/11-ghuloum.pdf">An Incremental Approach to Compiler Construction</a></li>
+<li><a href="https://craftinginterpreters.com">Crafting Interpreters</a></li>
+<li><a href="http://t3x.org/lsi/index.html">LISP System Implementation - Nils Holm</a></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="next" href="design-overview.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="next" href="design-overview.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="mermaid.min.js"></script>
+        <script type="text/javascript" src="mermaid-init.js"></script>
+    </body>
+</html>

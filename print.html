@@ -1,0 +1,840 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Crafting Marwood</title>
+        <meta name="robots" content="noindex" />
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Marwood</a></li><li class="chapter-item expanded "><a href="design-overview.html"><strong aria-hidden="true">1.</strong> Design Overview</a></li><li class="chapter-item expanded "><a href="parsing-printing-overview.html"><strong aria-hidden="true">2.</strong> Parsing & Printing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="sexpr.html"><strong aria-hidden="true">2.1.</strong> S-Expressions</a></li><li class="chapter-item expanded "><a href="cell.html"><strong aria-hidden="true">2.2.</strong> Cell</a></li><li class="chapter-item expanded "><a href="tokenizing.html"><strong aria-hidden="true">2.3.</strong> Tokenizing</a></li><li class="chapter-item expanded "><a href="parsing.html"><strong aria-hidden="true">2.4.</strong> Parsing</a></li></ol></li><li class="chapter-item expanded "><a href="vm-overview.html"><strong aria-hidden="true">3.</strong> Virtual Machine</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="vcell.html"><strong aria-hidden="true">3.1.</strong> VCell</a></li><li class="chapter-item expanded "><a href="stack.html"><strong aria-hidden="true">3.2.</strong> Stack</a></li><li class="chapter-item expanded "><a href="heap.html"><strong aria-hidden="true">3.3.</strong> Heap</a></li><li class="chapter-item expanded "><a href="global-environment.html"><strong aria-hidden="true">3.4.</strong> Global Environment</a></li></ol></li><li class="chapter-item expanded "><a href="numbers.html"><strong aria-hidden="true">4.</strong> Numbers</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Crafting Marwood</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="crafting-marwood"><a class="header" href="#crafting-marwood">Crafting Marwood</a></h1>
+<p><em>by Erik Bremen</em></p>
+<p>This book is built with <a href="https://github.com/rust-lang/mdBook">mdBook</a> and <a href="https://mermaid-js.github.io">Mermaid-JS</a>. Its source may be found at <a href="https://github.com/strtok/marwood-book">marwood-book</a>.</p>
+<h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p>Crafting Marwood is a book describing the process behind researching and building Marwood, a Scheme compiler and runtime written in Rust. Marwood may be interacted with on the web at <a href="https://repl.marwood.io">repl.marwood.io</a>, and its source is MIT Licensed and may be found on <a href="https://github.com/strtok/marwood">github</a>.</p>
+<h2 id="what-is-scheme"><a class="header" href="#what-is-scheme">What is Scheme?</a></h2>
+<p>Scheme is a programming language invented in 1975 by Guy Steel and Gerald Jay Sussman at MIT. It's the first dialect of lisp to use lexical scope, and its simplicity makes it a great choice for hobby programming language implementers.</p>
+<p>Here's a sample of scheme's syntax, demonstrating a recursive implementation of factorial:</p>
+<pre><code class="language-scheme">(define (factorial n)
+    (if (= n 0) 
+        1
+        (* n (factorial (- n 1)))))
+</code></pre>
+<h2 id="why-scheme"><a class="header" href="#why-scheme">Why Scheme?</a></h2>
+<p>Scheme has very simple grammar, and small number of core language features that once implemented provide the building blocks for the rest of the implementation.</p>
+<p><a href="https://small.r7rs.org">R7Small</a>, the latest standard at the time of writing, was published in 2013 and is just under 90 pages of text including full library specification and appendix.</p>
+<p>The simplicity of scheme allows the implementer to spend more time exploring complex branches of programming language implementations, such as garbage collection, macro expansion, optimizations, etc.</p>
+<h2 id="how-is-marwood-different"><a class="header" href="#how-is-marwood-different">How is Marwood different?</a></h2>
+<p>When researching scheme implementation material I came across two types of sources:</p>
+<ol>
+<li>
+<p>Academic material dating back to the 1970s. This material is quite abstract and a majority of these papers and books describe implementing a metacircular evaluator. There are very few materials on implementing scheme in a language like C or Rust.</p>
+</li>
+<li>
+<p>Modern scheme codebases such as Chez Scheme, Guile, Chicken, Chibi. These implementations have the best performance, but are composed of millions of lines of code over years of implementation from dozens of developers. </p>
+</li>
+</ol>
+<p>Marwood's goal was to provide an example of an implemenation of scheme that fits somewhere between #1 and #2.</p>
+<h2 id="who-is-this-book-for"><a class="header" href="#who-is-this-book-for">Who is this book for?</a></h2>
+<p>This book is walkthrough through Marwood's source code. It is aimed at an audience with some experience with the Rust programming language, parsers, and compilers.</p>
+<p>For a detailed tutorial series on writing an interpreter, I would recommend <a href="https://craftinginterpreters.com">Crafting Interpreters</a>.</p>
+<h2 id="resources-and-influences"><a class="header" href="#resources-and-influences">Resources and Influences</a></h2>
+<p>These resources were found useful when researching scheme implementations:</p>
+<ul>
+<li><a href="https://github.com/schemedoc/bibliography">Scheme Bibliography Github</a></li>
+<li><a href="https://dl.acm.org/doi/10.5555/37555">Three Implementation Models for Scheme - Kent Dybvig</a></li>
+<li><a href="http://scheme2006.cs.uchicago.edu/11-ghuloum.pdf">An Incremental Approach to Compiler Construction</a></li>
+<li><a href="https://craftinginterpreters.com">Crafting Interpreters</a></li>
+<li><a href="http://t3x.org/lsi/index.html">LISP System Implementation - Nils Holm</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="design-overview"><a class="header" href="#design-overview">Design Overview</a></h1>
+<h2 id="highlevel-design-choices"><a class="header" href="#highlevel-design-choices">Highlevel Design Choices</a></h2>
+<p>The first major decision when constructing Marwood was to decide how Marwood would evaluate scheme:</p>
+<ol>
+<li>
+<p><em>Direct evaluation of the AST in the host language</em>: This is the most natural way to attempt to write an interpreter for Scheme, but it has a few short-comings. Certain features like tail-call optimization and call/cc may be more difficult to implement depending on the host language, and other considerations like memory management are directly affected by the host language. </p>
+<p>This approach makes a lot of sense if the host language is Scheme, however. There are numerous texts (e.g. <a href="https://sicp.sourceacademy.org">sicp</a>) on writing meta-circular evaluators in Scheme, and it is one of the many brilliant examples of Scheme's elegant design.</p>
+</li>
+<li>
+<p><em>Compilation to an existing target architecture</em>: The target architecture could be hardware based (e.g. x86, amd64, arm) such as in <a href="http://scheme2006.cs.uchicago.edu/11-ghuloum.pdf">An Incremental Approach to Compiler Construction</a>, or virtual (JVM, WASM, etc).</p>
+</li>
+<li>
+<p><em>Compilation to a custom virtual machine</em>: A custom virtual machine is created designed to evaluate Scheme.</p>
+</li>
+</ol>
+<p>Marwood uses a custom virtual machine approach.</p>
+<h2 id="marwood-library"><a class="header" href="#marwood-library">Marwood Library</a></h2>
+<p>The Marwood library allows the creation of Scheme virtual machines, which may be used to evaluate scheme expressions. Each virtual machine represents the state of a scheme environment (global environment, heap, stack, etc).</p>
+<p>Here's an example demonstrating creation of a recursive factorial procedure, and evaluation of <code>(factorial n)</code> for n in 0..10:</p>
+<pre><code class="language-rust noplayground">use marwood::vm::Vm;
+
+fn main() {
+    let mut vm = Vm::new();
+    let code = r#&quot;
+        (define (factorial n)
+            (let factorial ([n n] [acc 1])
+               (if (zero? n)
+                   acc
+                   (factorial (- n 1) (* acc n)))))
+    &quot;#;
+
+    vm.eval_text(&amp;code).unwrap();
+
+    for it in 0..10 {
+        let (cell, _) = vm.eval_text(&amp;format!(&quot;(factorial {})&quot;, it)).unwrap();
+        println!(&quot;the factorial of {} is {}&quot;, it, cell);
+    }
+}
+</code></pre>
+<p>Which produces the following output:</p>
+<pre><code>the factorial of 0 is 1
+the factorial of 1 is 1
+the factorial of 2 is 2
+the factorial of 3 is 6
+the factorial of 4 is 24
+the factorial of 5 is 120
+the factorial of 6 is 720
+the factorial of 7 is 5040
+the factorial of 8 is 40320
+the factorial of 9 is 362880
+</code></pre>
+<h2 id="a-breakdown-of-marwoods-components"><a class="header" href="#a-breakdown-of-marwoods-components">A breakdown of Marwood's Components</a></h2>
+<p>The remainder of this text describes the design decisions behind each of Marwood's major library components:</p>
+<ul>
+<li>
+<p>A <a href="https://github.com/strtok/marwood/blob/master/marwood/src/parse.rs">parser</a> and <a href="https://github.com/strtok/marwood/blob/master/marwood/src/lex.rs">tokenizer</a> used to create Marwood's AST <a href="https://github.com/strtok/marwood/blob/master/marwood/src/cell.rs">cell</a> object. This object acts as both input to the VM's <code>eval()</code> function, and also the result of an evaluation. Marwood's tokenizer is also useful in other situations, such as providing input to REPL syntax highlighting and bracket matching.</p>
+</li>
+<li>
+<p>A <a href="https://github.com/strtok/marwood/blob/master/marwood/src/vm/mod.rs">virtual machine</a> that represents a scheme environment and may be used to execute scheme. The VM may be used to evaluate a <code>Cell</code> produced by Marwood's parser. Successful evaluation results in an output <code>Cell</code>, that represents the result of the evaluation. </p>
+</li>
+<li>
+<p>A <a href="https://github.com/strtok/marwood/blob/master/marwood/src/vm/compile.rs">compiler</a> that given a <code>Cell</code> and a <code>VM</code>, constructs compiled bytecode to be executed on the VM.</p>
+</li>
+<li>
+<p>Numerous <a href="https://github.com/strtok/marwood/tree/master/marwood/src/vm/builtin">built-in</a> Scheme library procedures written in rust, and a scheme <a href="https://github.com/strtok/marwood/blob/master/marwood/prelude.scm">prelude</a> containing library procedures written in scheme.</p>
+</li>
+<li>
+<p>The <a href="https://github.com/strtok/marwood/blob/master/marwood-repl/src/main.rs">repl</a> and <a href="https://github.com/strtok/marwood/tree/master/marwood-wasm">web-repl</a> crates. These creates are separate from the main Marwood library crates, and provide example implementations of REPLs that use the Marwood library.</p>
+</li>
+</ul>
+<p>This diagram illustrates a Marwood read-eval-print loop. Text is read from the readline library, tokenized, parsed, evaluated and then the resulting <code>Cell</code> object is printed back to the user.</p>
+<p>The VM object maintains any state expected by the user between evaluations. For example, if the user enters <code>(define x 10)</code>, then on evaluation the VM object will modify its heap to represent the new binding for x.</p>
+<pre class="mermaid">flowchart LR
+    A(Readline) --&gt;|Text| B(Tokenizer)
+    B --&gt;|Token Stream| C(Parser)
+    C --&gt;|Cell| D(VM)
+    D --&gt;|Cell| A
+</pre>
+<p>The remaining sections of this text describe in detail how these different components were designed.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="parsing--printing"><a class="header" href="#parsing--printing">Parsing &amp; Printing</a></h1>
+<p>Scheme, having an incredibly simple grammar, lends itself well to a hand-written lexer and recursive descent parser.</p>
+<p>Marwood's parser is composed of three separate components:</p>
+<ul>
+<li>
+<p>the <code>Cell</code> object, which represents a Scheme <a href="https://en.wikipedia.org/wiki/S-expression">sexpr</a> in Rust</p>
+</li>
+<li>
+<p>the <code>lexer</code> (or scanner or tokenizer), which is responsible for turning plain-text scheme into a list of tokens to be consumed by Marwood's <code>parser</code>.</p>
+</li>
+<li>
+<p>the <code>parser</code>, which is responsible for constructing an aggregate structure called <code>Cell</code> from the lexer output.</p>
+</li>
+</ul>
+<h2 id="example"><a class="header" href="#example">Example</a></h2>
+<p>This example demonstrates the manual use of Marwood's lexer, parser, and Cell types. It also shows use of Marwood's printer. The alternative printing syntax <code>{:#}</code> provides additional escaping, and is the printer used for Scheme's <code>write</code> procedure.</p>
+<pre><code class="language-rust  noplayground">    let scheme_code = r#&quot;
+        (quote (#\x 20 puppies))
+    &quot;#;
+
+    let tokens: Vec&lt;Token&gt; = lex::scan(scheme_code).unwrap();
+    let cell = parse::parse(scheme_code, &amp;mut tokens.iter().peekable()).unwrap();
+
+    println!(&quot;{}&quot;, cell);
+    println!(&quot;{:#}&quot;, cell);
+</code></pre>
+<p>outputs:</p>
+<pre><code class="language-scheme">'(x 20 puppies)
+'(#\x 20 puppies)
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="s-expressions"><a class="header" href="#s-expressions">S-Expressions</a></h1>
+<p>When designing a scheme parser, we first have to think a little bit about how to represent Scheme expressions in Rust's type system.</p>
+<p>Fortunately Scheme's source code is already representable in a data structure called an S-expression (or <a href="https://en.wikipedia.org/wiki/S-expression">sexpr</a>). This is one of the fundamental properties of a lisp: source code is data.</p>
+<p>A sexpr can be thought of as an aggregate type that can represent one of two things:</p>
+<ol>
+<li>an atom, such as a booleans, numbers, symbols, strings, nil, etc.</li>
+<li>a pair in the form (<em>car</em> . <em>cdr</em>), where *car *and <em>cdr</em> are themselves S-expressions</li>
+</ol>
+<p>The expression <code>(+ 2 3)</code> in scheme is sugar for a tree of pairs, which could be rewritten  <code>(+ . (2 . (3 . ())))</code>.</p>
+<p>This diagram depicts the above expression as a tree:</p>
+<pre class="mermaid">flowchart TD
+    A(( )) --&gt;|car| +((+))
+    A --&gt;|cdr| B(( ))
+    B --&gt;|car| 2((2))
+    B --&gt;|cdr| C(( ))
+    C --&gt;|car| 3((3))
+    C --&gt;|cdr| nil((nil))
+</pre>
+<h2 id="improper-lists"><a class="header" href="#improper-lists">Improper Lists</a></h2>
+<p>The expression <code>(1 2 . 3)</code> is an example of an *improper list, a list not terminated with '(). It relies on special use of a dot preceding the very last element in a list. This list could also be written as <code>(1 . (2 . 3))</code>.</p>
+<pre class="mermaid">flowchart TD
+    A(( )) --&gt;|car| +((+))
+    A --&gt;|cdr| B(( ))
+    B --&gt;|car| 2((2))
+    B --&gt;|cdr| 3((3))
+</pre>
+<p>Improper lists are less common in Scheme, but there are a few parts of R7Rs, such as variable argument support, that rely on improper lists.</p>
+<p>Examples of improper lists are:</p>
+<pre><code class="language-scheme">'(1 2 3 4 5 6 7 8 9 . 10)
+'((10 10) (20 20) . (/ 30 30))
+</code></pre>
+<p>This example is invalid scheme because there are two expressions after the dot:</p>
+<pre><code class="language-scheme">'(1 2 . 3 4)
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cell"><a class="header" href="#cell">Cell</a></h1>
+<p>If Scheme can be represented by an aggregate type called a sexpr, then we just need to create a type in Rust that represents an S-expression: a type that can be either an atom, or a pair. Fortunately Rust's enum type allows exactly this: the creation of a type that represents one of several possible variants.</p>
+<p>Marwood's <a href="https://github.com/strtok/marwood/blob/master/marwood/src/cell.rs">Cell</a> is the enum type that represents Scheme data and code in Marwood. It is the main input to Marwood's compiler, macro transformers, and printer, and is the output of Marwood's VM as a result of evaluating scheme.</p>
+<p>Most Cell's variants represent <em>atom</em> types in Scheme, such as booleans, numbers, symbols, characters, and strings:</p>
+<pre><code class="language-rust noplayground">pub enum Cell {
+    Bool(bool),
+    Char(char),
+    Number(Number),
+    Nil,
+    String(String),
+    Symbol(String),
+    ...
+}
+</code></pre>
+<p>As an example, parsing the scheme expression <code>#f</code> would result in Marwood's parser outputting the value <code>Cell::Bool(false)</code>.</p>
+<h2 id="pairs"><a class="header" href="#pairs">Pairs</a></h2>
+<p>Cell also contains an aggregate type called <em>Pair</em>, which represents a sexpr pair:</p>
+<pre><code class="language-rust noplayground">pub enum Cell {
+    ...
+    Pair(Box&lt;Cell&gt;, Box&lt;Cell&gt;),
+    ...
+}
+</code></pre>
+<p><code>Pair</code> is a pair of Cells representing the <code>car</code> and <code>cdr</code> parts of a cons pair. This structure can be used to represent pairs in scheme, which in turn may be used to represent lists. This is the main building block for representing Scheme code's tree structure in Rust.</p>
+<h2 id="vectors"><a class="header" href="#vectors">Vectors</a></h2>
+<p><code>Vector</code> represents a literal scheme vector, such as <code>#(10 20 30)</code>.</p>
+<pre><code class="language-rust noplayground">pub enum Cell {
+    ...
+    Vector(Vec&lt;Cell&gt;),
+    ...
+}
+</code></pre>
+<h2 id="special-variants"><a class="header" href="#special-variants">Special Variants</a></h2>
+<p>The Cell enum also contains a few variants that can only be produced as output of Marwood's evaluator. For example, the <code>Cell::Void</code> variant is produced by some Marwood procedures that evaluate to <code>#&lt;void&gt;</code> (e.g. define, set!). It is not possible to produce these variants via Marwood's parser.</p>
+<pre><code class="language-rust noplayground">#[derive(Debug, Eq, PartialEq, Hash, Clone)]
+pub enum Cell {
+    ...
+    Continuation,
+    Macro,
+    Procedure(Option&lt;String&gt;),
+    Undefined,
+    Void,
+}
+
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tokenizing"><a class="header" href="#tokenizing">Tokenizing</a></h1>
+<p>Marwood's <a href="https://github.com/strtok/marwood/blob/master/marwood/src/lex.rs">lexer</a> is in the form:</p>
+<pre><code class="language-rust noplayground">fn scan(text: &amp;str) -&gt; Result&lt;Vec&lt;Token&gt;, Error&gt;
+</code></pre>
+<p>Given scheme code as input, the scan function returns a vector of tokens according to the Scheme grammar Each token contains a span, which may be used to extract the token's text from the source text, and the token type (e.g. LeftParen).</p>
+<pre><code class="language-rust noplayground">pub struct Token {
+    /// (start, end) index of original span in the source &amp;str
+    pub span: (usize, usize),
+    /// The type output by the scanner
+    pub token_type: TokenType,
+}
+
+pub enum TokenType {
+    Char,
+    Dot,
+    False,
+    LeftParen,
+    Number,
+    NumberPrefix,
+    RightParen,
+    SingleQuote,
+    String,
+    Symbol,
+    True,
+    WhiteSpace,
+    HashParen,
+}
+</code></pre>
+<h3 id="errorincomplete"><a class="header" href="#errorincomplete">Error::Incomplete</a></h3>
+<p>The special error <code>Error::Incomplete</code> is returned in certain circumstances where the input looks incomplete, and may be hint to the REPL interface that the user intends to enter a multi-line expression.</p>
+<p>An example that may cause an <code>Error::Incomplete</code> error in Marwood's scanner is a mismatched double quote: <code>&quot;hello world</code>.</p>
+<h3 id="scanner-example"><a class="header" href="#scanner-example">Scanner Example</a></h3>
+<p>Given this code:</p>
+<p><code>'(10 20 &quot;puppies&quot;) ; heterogeneous</code></p>
+<p>The tokenizer will produce the following tokens:</p>
+<pre><code>[
+    Token {
+        span: (0, 1),
+        token_type: SingleQuote,
+    },
+    Token {
+        span: (1, 2),
+        token_type: LeftParen,
+    },
+    Token {
+        span: (2,4),
+        token_type: Number,
+    },
+    Token {
+        span: (5,7),
+        token_type: Number,
+    },
+    Token {
+        span: (8,17),
+        token_type: String,
+    },
+    Token {
+        span: (17,18),
+        token_type: RightParen,
+    }
+]
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="parsing"><a class="header" href="#parsing">Parsing</a></h1>
+<h3 id="the-parse-function"><a class="header" href="#the-parse-function">The Parse Function</a></h3>
+<p>Marwood's parser is a direct consumer of <code>Vec&lt;Token&gt;</code> returned by the lexer.</p>
+<p><code>parse::parse()</code> takes an iterator over <code>&amp;Token</code>, the original source &amp;str that was supplied to <code>lex::scan</code>, and returns a <code>Cell</code>.</p>
+<pre><code class="language-rust noplayground">pub fn parse&lt;'a, T: Iterator&lt;Item = &amp;'a Token&gt;&gt;(
+    text: &amp;str,
+    cur: &amp;mut Peekable&lt;T&gt;,
+) -&gt; Result&lt;Cell, Error&gt;
+</code></pre>
+<p><code>parse</code> will only consume one expression from <code>cur</code>. If <code>cur</code> may contain multiple expressions, the cursor position that <code>parse</code> left off at can be used to determine the cursor position of the next expression.</p>
+<p>For example, this scheme source contains five expressions and would require five separate calls to <code>parse</code>.</p>
+<pre><code class="language-scheme">1 2 3
+(+ 1 2)(+ 3 4)
+</code></pre>
+<h3 id="errorincomplete-1"><a class="header" href="#errorincomplete-1">Error::Incomplete</a></h3>
+<p>Similarly to scan, parse() will return Error::Incomplete if the token stream does not contain a complete expression.</p>
+<p>Some examples of incomplete expressions:</p>
+<pre><code class="language-scheme">'(1 2 3
+</code></pre>
+<pre><code class="language-scheme">'(1 2 3)'(4 5
+</code></pre>
+<pre><code class="language-scheme">#(1 2 3)
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="virtual-machine"><a class="header" href="#virtual-machine">Virtual Machine</a></h1>
+<p>Marwood has a stack based virtual machine represented by the <code>Vm</code> object. Each Vm represents a full scheme runtime environment.</p>
+<p>Scheme expressions evaluated on the VM are compiled into byte code represented by [op codes], which are evaluated by the VM.</p>
+<pre><code class="language-rust noplayground">#[derive(Debug)]
+pub struct Vm {
+    /// The heap and global environment
+    heap: Heap,
+    globenv: GlobalEnvironment,
+
+    /// The current program stack
+    stack: Stack,
+
+    /// Registers
+    acc: VCell,
+    ep: usize,
+    ip: (usize, usize),
+    bp: usize,
+
+    /// System Interface (display, write, etc).
+    sys: Box&lt;dyn SystemInterface&gt;,
+}
+</code></pre>
+<p>The <code>Vm</code> object provides an eval interface for evaluating scheme expressions, and is the main interface for the console and web repl:</p>
+<pre><code class="language-rust noplayground">fn eval(&amp;mut self, cell: &amp;Cell) -&gt; Result&lt;Cell, Error&gt;
+</code></pre>
+<h2 id="vm-components"><a class="header" href="#vm-components">VM Components</a></h2>
+<p>The <code>Vm</code> is composed of these high-level components, which are explored later in this chapter:</p>
+<ul>
+<li>the <a href="https://github.com/strtok/marwood/blob/master/marwood/src/vm/stack.rs">stack</a></li>
+<li>a garbage collected <a href="https://github.com/strtok/marwood/blob/master/marwood/src/vm/heap.rs">heap</a></li>
+<li>the global <a href="https://github.com/strtok/marwood/blob/master/marwood/src/vm/environment.rs">environment</a></li>
+<li>registers</li>
+</ul>
+<h2 id="registers"><a class="header" href="#registers">Registers</a></h2>
+<p>The Vm has a handful of registers that are used to maintain currently running program state:</p>
+<div class="table-wrapper"><table><thead><tr><th>Register</th><th>Description</th></tr></thead><tbody>
+<tr><td>%acc</td><td>Accumulator</td></tr>
+<tr><td>%ip</td><td>Instruction Pointer</td></tr>
+<tr><td>%bp</td><td>Frame Base Pointer</td></tr>
+<tr><td>%sp</td><td>Stack Pointer</td></tr>
+<tr><td>%ep</td><td>Environment Pointer</td></tr>
+</tbody></table>
+</div>
+<p>The %acc (or accumulator) register contains the result of any Vm instruction that produces a result. The %acc register is also used by procedures to store the result of procedure application. For example, the procedure <code>(+ 10 10)</code> would result in %acc containing the result <code>20</code>.</p>
+<p>The %ip register contains a tuple that points to the currently running block of bytecode, and offset in the bytecode of the next instruction to be executed.</p>
+<p>The %bp, %sp and %ep registers maintain state of Marwood's stack and call frame state and are discussed in detail in the procedure application section.</p>
+<h2 id="op-codes"><a class="header" href="#op-codes">Op Codes</a></h2>
+<p>Marwood's instruction set is built specifically for executing scheme. It's not a general purpose virtual machine. </p>
+<p>The MOV instruction is used to move values between Marwood's registers, stack, global and lexical environments.</p>
+<p>The CALL, CLOSURE, ENTER, RET, TCALL, and VARARG instructions support procedure application.</p>
+<p>The JMP and JNT provide branching support for the compiler to support the scheme <code>if</code> primitive.</p>
+<p>The CONS and VPUSH instructions are instructions used to build lists or vectors at runtime, and are primarily used to support the quasiquote language feature.</p>
+<p>The HALT instruction stops the virtual machine, returning the contents of the %acc register as the result to <code>eval</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Opcode</th><th>Description</th></tr></thead><tbody>
+<tr><td>CALL %acc</td><td>Given the arguments for the procedure in %acc have been pushed on the stack, jump to the procedure in %acc.</td></tr>
+<tr><td>CLOSURE %acc</td><td>Create a lexical environment as a result of evaluating a (lambda ...) expression.</td></tr>
+<tr><td>CONS</td><td>Performs the cons operation on the first two values of the stack, storing the resulting pair in %acc</td></tr>
+<tr><td>ENTER</td><td>Setup the currently executing procedure's stack frame</td></tr>
+<tr><td>HALT</td><td>Halt program, returning the result contained within ACC</td></tr>
+<tr><td>JNT &lt;OFFSET&gt;</td><td>Set %ip to OFFSET if %acc is #f</td></tr>
+<tr><td>JMP &lt;OFFSET&gt;</td><td>Set %ip to OFFSET</td></tr>
+<tr><td>MOV &lt;SRC&gt; &lt;DEST&gt;</td><td>Move the value from SRC into DEST</td></tr>
+<tr><td>PUSH</td><td>Push the value in ACC on to the stack</td></tr>
+<tr><td>RET</td><td>Return from a procedure entered via CALL</td></tr>
+<tr><td>TCALL %acc</td><td>Identical to a CALL instruction, except that a tail optimizing CALL is performed.</td></tr>
+<tr><td>VPUSH</td><td>Push the value in %acc onto the vector at the top of the stack, storing the resulting vector in %acc</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="why-a-second-cell-type"><a class="header" href="#why-a-second-cell-type">Why a second Cell type?</a></h1>
+<p>While Marwood's <code>Cell</code> type is able to represent any scheme expression, it's not suitable for representing Scheme structure in Marwood's VM.</p>
+<p>Consider the following expressions that create a small list bound to x, and then bind y to a subset of the list:</p>
+<pre><code class="language-scheme">(define x '(1 2 3))
+(define y (cdr x))
+</code></pre>
+<p>This is because the expression <code>(define y (cdr x))</code> has bound y to a sub-structure of x. It is not a copy. If y were mutated with <code>set-car!</code> or <code>set-cdr!</code> we would expect the structure that x is bound to realize the mutation also.</p>
+<pre class="mermaid">flowchart TD
+    x --&gt; A
+    y --&gt; B
+    A(( )) --&gt;|car| 1((1))
+    A --&gt;|cdr| B(( ))
+    B --&gt;|car| 2((2))
+    B --&gt;|cdr| C(( ))
+    C --&gt;|car| 3((3))
+    C --&gt;|cdr| nil((nil))
+</pre>
+<p>Further, if x were to be bound to another value, we expect that Marwood be able to garbage collect any part of the structure no longer referenced. In this example, the pair x is pointing to would no longer be required and may be collected. Only the structure referenced by y would remain:</p>
+<pre><code>(define x 0)
+</code></pre>
+<pre class="mermaid">flowchart TD
+    y --&gt; B(( ))
+    B --&gt;|car| 2((2))
+    B --&gt;|cdr| C(( ))
+    C --&gt;|car| 3((3))
+    C --&gt;|cdr| nil((nil))
+</pre>
+<p>Representing this relationship with Marwood's existing <code>Cell</code> data structure would be very difficult. With the <code>Cell</code> data structure, pairs are represented as <code>Pair(Box&lt;Cell&gt;, Box&lt;Cell&gt;)</code>. It's not possible for two pairs to refer to the same data structure.</p>
+<h1 id="vcell"><a class="header" href="#vcell">VCell</a></h1>
+<p>The <code>VCell</code> type is how Marwood represents scheme at runtime. It's also used to represent other runtime objects, such as VM op codes, registers, and even lexical environments. Marwood's stack and heaps are just vectors of VCell. It is the universal type!</p>
+<p>Instead of a pair being represented by <code>(Box&lt;Cell&gt;, Box&lt;Cell&gt;)</code>, a VCell pair is represented by <code>(usize, usize)</code>, each usize corresponding to the locations of the <code>car</code> and <code>cdr</code> portions on the heap. This is explored further in the section on Marwood's heap.</p>
+<pre><code class="language-rust noplayground">#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum VCell {
+    Bool(bool),
+    Char(char),
+    Nil,
+    Number(Number),
+    Pair(usize, usize),
+    Symbol(Rc&lt;String&gt;),
+    String(Rc&lt;RefCell&lt;String&gt;&gt;),
+    Vector(Rc&lt;Vector&gt;),
+    ...
+}
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> Marwood's VCell enum is kept a maximum of 24 bytes. 8 bytes represent the enum tag, and an additional 16 bytes  remain for data. Any VCell variants that may exceed this size are boxed with <code>Rc</code>, though the most common types fit well within this limit.
+Keeping VCell as small as possible has the benefit that it may be trivially cloneable, which comes in handy when encountering any borrow checker related issues with reading VCell values from Marwood's heap and stack.</p>
+</blockquote>
+<h1 id="vcell--scheme"><a class="header" href="#vcell--scheme">VCell &gt; Scheme</a></h1>
+<p>VCell's primary role is to represent scheme data in Marwood's VM, but it's also used to represent Marwood's internal instruction format (byte code) and values on Marwood's stack, heap, global and lexical environments. The remaining VCell variants are used to represent the various types that may be encountered.</p>
+<pre><code class="language-rust noplayground">#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum VCell {
+    ...
+
+    Continuation(Rc&lt;Continuation&gt;),
+    Closure(usize, usize),
+    Lambda(Rc&lt;Lambda&gt;),
+    LexicalEnv(Rc&lt;LexicalEnvironment&gt;),
+    LexicalEnvSlot(usize),
+    LexicalEnvPtr(usize, usize),
+    Macro(Rc&lt;Transform&gt;),
+
+    Acc,
+    ArgumentCount(usize),
+    BasePointer(usize),
+    BasePointerOffset(i64),
+    BuiltInProc(Rc&lt;BuiltInProc&gt;),
+    EnvironmentPointer(usize),
+    GlobalEnvSlot(usize),
+    InstructionPointer(usize, usize),
+    OpCode(OpCode),
+    Ptr(usize),
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="stack"><a class="header" href="#stack">Stack</a></h1>
+<p>Marwood's stack is represented by an upward growing stack of VCell values, and a stack pointer <code>%sp</code> that represents the current top of the stack.</p>
+<p>The stack's main purpose is to support the application of procedures, which include the pushing of arguments and meta data required for call frame setup.</p>
+<p>Here's an example stack during evaluation of the expression <code>(+ 10 5)</code>, with the stack pointer pointing at slot 7, and the arguments to <code>+</code> having been pushed in slots 5 and 6.</p>
+<div class="table-wrapper"><table><thead><tr><th>Slot</th><th>Value</th><th>SP</th></tr></thead><tbody>
+<tr><td><strong>7</strong></td><td><strong>%argc[2]</strong></td><td>←</td></tr>
+<tr><td><strong>6</strong></td><td><strong>Fixnum(5)</strong></td><td></td></tr>
+<tr><td><strong>5</strong></td><td><strong>Fixnum(10)</strong></td><td></td></tr>
+<tr><td>4</td><td>%bp[$00]</td><td></td></tr>
+<tr><td>3</td><td>%ip[$223][$06]</td><td></td></tr>
+<tr><td>2</td><td>%ep[$ffffffffffffffff]</td><td></td></tr>
+<tr><td>1</td><td>%argc[0]</td><td></td></tr>
+<tr><td>0</td><td>Undefined</td><td></td></tr>
+</tbody></table>
+</div>
+<h1 id="stack-structure"><a class="header" href="#stack-structure">Stack Structure</a></h1>
+<p>Marwood's stack is backed by a Rust <code>Vec&lt;VCell&gt;</code>, and the stack pointer <code>sp</code> which contains the index of the current top of the stack in the stack vector. Operations such as push and pop are backed by the rust Vector's implementation of push and pop.</p>
+<pre><code class="language-rust noplayground">pub struct Stack {
+    /// Stack contents
+    stack: Vec&lt;VCell&gt;,
+
+    /// Stack Pointer. SP points to the top value to be pushed onto the stack,
+    /// This value backs the SP register of the VM
+    sp: usize,
+}
+</code></pre>
+<p>Stack manipulation is provided by push and pop functions:</p>
+<pre><code class="language-rust noplayground">    pub fn push&lt;T: Into&lt;VCell&gt; + Display&gt;(&amp;mut self, vcell: T)
+    pub fn pop(&amp;mut self) -&gt; Result&lt;&amp;VCell, Error&gt;
+
+</code></pre>
+<p>Access to values values on the stack are provided by either direct index into the stack, or offset relative to the current stack pointer:</p>
+<pre><code class="language-rust  noplayground">
+    pub fn get(&amp;self, index: usize) -&gt; Result&lt;&amp;VCell, Error&gt;
+    pub fn get_mut(&amp;mut self, index: usize) -&gt; Result&lt;&amp;mut VCell, Error&gt;
+    pub fn get_offset(&amp;self, offset: i64) -&gt; Result&lt;&amp;VCell, Error&gt; {
+    pub fn get_offset_mut(&amp;mut self, offset: i64) -&gt; Result&lt;&amp;mut VCell, Error&gt;
+</code></pre>
+<blockquote>
+<h4 id="stack-growth"><a class="header" href="#stack-growth">Stack Growth</a></h4>
+<p>The <code>push</code> operation is backed directly by Vec's push function, which will grow the underlying vector automatically. The stack does not currently have any method of shrinking the stack vector.</p>
+</blockquote>
+<h1 id="stack-api-example"><a class="header" href="#stack-api-example">Stack API Example</a></h1>
+<pre><code class="language-rust noplayground">    let mut stack = Stack::new();
+
+    // Push
+    stack.push(VCell::number(1));
+    stack.push(VCell::number(2));
+
+    // Access relative to %sp
+    assert_eq!(stack.get_offset(0), Ok(&amp;VCell::number(2)));
+    assert_eq!(stack.get_offset(-1), Ok(&amp;VCell::number(1)));
+    assert_eq!(stack.get_offset(-2), Ok(&amp;VCell::Undefined));
+
+    // Pop
+    assert_eq!(stack.pop(), Ok(&amp;VCell::number(2)));
+    assert_eq!(stack.pop(), Ok(&amp;VCell::number(1)));
+    assert_eq!(stack.pop(), Err(InvalidStackIndex(0)));
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="heap"><a class="header" href="#heap">Heap</a></h1>
+<p>This small snippset of scheme is useful for reasoning about why scheme might need a heap:</p>
+<pre><code class="language-scheme">(define x 10)
+(define y (* x x ))
+(define animals '(cats otters puppies))
+(define sub-animals (cdr animals))
+</code></pre>
+<p>Both the value for x and y are bound to numbers. Mutating <code>x</code> and <code>y</code> only require changing what value the symbol is bound to in the environment.</p>
+<p>But, animals and sub-animals are a little more nuanced. animals is a list composed of <code>pairs</code> and <code>symbols</code>, and more importantly sub-animals refers to tail of the same list containing the values <code>'(otters puppies)</code>. That is, both <code>animals</code> and <code>sub-animals</code> refer to parts of the same data structure. Not a copy.</p>
+<p>If sub-animals were modified with <code>set-car!</code> or <code>set-cdr!</code>, the mutation must also be realized on the list that <code>animals</code> is bound to.</p>
+<p>One way of supporting this type of funcitonality is to store these shared values on a heap. <code>animals</code> and <code>sub-animals</code> can then contain references into the same data structure on a heap.</p>
+<h1 id="heap-structure"><a class="header" href="#heap-structure">Heap Structure</a></h1>
+<p>Like the stack, Marwood's heap is composed of a <code>Vec&lt;VCell&gt;</code>, along with various supporting structures used to track free slots, intern symbols, and garbage collection.</p>
+<pre><code class="language-rust noplayground">pub struct Heap {
+    chunk_size: usize,
+    free_list: Vec&lt;usize&gt;,
+    heap: Vec&lt;VCell&gt;,
+    heap_map: gc::Map,
+    symbol_table: HashMap&lt;String, usize&gt;,
+}
+</code></pre>
+<p><code>chunk_size</code> refers to the number of heap slots allocated when the heap needs to grow. On initialization, the Heap will allocate chunk_size slots initialized to VCell::Undefined, and add the index of each unused heap slot to <code>free_list</code>. This free list contains indexes on the heap of unused slots ready to be allocated.</p>
+<pre><code class="language-rust noplayground">    pub fn new(chunk_size: usize) -&gt; Heap {
+        Heap {
+            chunk_size,
+            heap: vec![VCell::undefined(); chunk_size],
+            free_list: (0..chunk_size).rev().into_iter().collect()
+        }
+    }
+</code></pre>
+<blockquote>
+<h4 id="heap-references"><a class="header" href="#heap-references">Heap References</a></h4>
+<p>References into Marwood's heap are of the type <code>type HeapRef = usize;</code> and are direct indexes into the heap. These heap references can be found in various places in Marwood's VCell and VM structures:</p>
+<ul>
+<li>VCell::Ptr(HeapRef)</li>
+<li>VCell::Pair(HeapRef, HeapRef)</li>
+<li>VCell::Closure(HeapRef, HeapRef)</li>
+</ul>
+</blockquote>
+<h1 id="alloc--free"><a class="header" href="#alloc--free">Alloc &amp; Free</a></h1>
+<p>The heap's core API is composed of alloc, free and get operations on the heap.</p>
+<pre><code class="language-rust noplayground">    pub fn grow(&amp;mut self)
+    pub fn alloc(&amp;mut self) -&gt; usize
+    pub fn free(&amp;mut self, ptr: usize)
+
+    pub fn get_at_index(&amp;self, ptr: usize) -&gt; &amp;VCell
+    pub fn get_at_index_mut(&amp;mut self, ptr: usize) -&gt; &amp;mut VCell
+    pub fn get&lt;'a, T: Into&lt;Cow&lt;'a, VCell&gt;&gt;&gt;(&amp;self, vcell: T) -&gt; VCell
+</code></pre>
+<p><code>alloc</code> returns the next available slot on the <code>free_list</code>, calling <code>grow</code> to grow the heap by <code>chunk_size</code> elements if the <code>free_list</code> is empty. The disposition of the slot is also marked as State::Allocated in the heap_map, which is used by Marwood's garbage collector and discussed in more detail in later sections.</p>
+<pre><code class="language-rust noplayground">    pub fn alloc(&amp;mut self) -&gt; usize {
+        match self.free_list.pop() {
+            None =&gt; {
+                self.grow();
+                self.alloc()
+            }
+            Some(ptr) =&gt; {
+                self.heap_map.set(ptr, State::Allocated);
+                ptr
+            }
+        }
+    }
+</code></pre>
+<p><code>free</code> returns a heap slot back to the <code>free_list</code>. The contents is set back to <code>VCell::Undefined</code>, which may help catch any bugs in Marwood where a heap reference is used when it no longer should be. </p>
+<p>The slot is also marked State::Free in the heap_map, a data structure used by Marwood's garbage collector.</p>
+<pre><code class="language-rust noplayground">    pub fn free(&amp;mut self, ptr: usize) {
+        self.heap_map.set(ptr, State::Free);
+        if let Some(VCell::Symbol(sym)) = self.heap.get(ptr) {
+            self.symbol_table.remove(&amp;**sym);
+        }
+        *self.heap.get_mut(ptr).unwrap() = VCell::Undefined;
+        self.free_list.push(ptr);
+    }
+</code></pre>
+<p>The core get operations on the heap are not notable, except that the get functions will panic if given an index that is not valid for the current heap. </p>
+<p>The function <code>get</code> acts as a wrapper around <code>get_at_index</code> and only performs a heap lookup if the supplied vcell is a pointer type. This allows code in Marwood to access values on the stack or environment slots without having to check of the value is a reference first.</p>
+<pre><code class="language-rust noplayground">    pub fn get_at_index(&amp;self, ptr: usize) -&gt; &amp;VCell {
+        self.heap.get(ptr).expect(&quot;heap index out of bounds&quot;)
+    }
+
+    pub fn get_at_index_mut(&amp;mut self, ptr: usize) -&gt; &amp;mut VCell {
+        self.heap.get_mut(ptr).expect(&quot;heap index out of bounds&quot;)
+    }
+
+    pub fn get&lt;'a, T: Into&lt;Cow&lt;'a, VCell&gt;&gt;&gt;(&amp;self, vcell: T) -&gt; VCell {
+        match vcell.into() {
+            Cow::Borrowed(vcell) =&gt; match vcell {
+                VCell::Ptr(ptr) =&gt; self.get_at_index(*ptr).clone(),
+                vcell =&gt; vcell.clone(),
+            },
+            Cow::Owned(vcell) =&gt; match vcell {
+                VCell::Ptr(ptr) =&gt; self.get_at_index(ptr).clone(),
+                vcell =&gt; vcell,
+            },
+        }
+    }
+</code></pre>
+<h1 id="put"><a class="header" href="#put">Put</a></h1>
+<p>The <code>put</code> function puts the supplied vcell on the next available slot on the heap returned by <code>alloc</code>. If vcell was already a pointer type, then it's returned instead of being double boxed by the heap. This removes the need for a lot of boxing code in Marwood to check if the value it's boxing is already boxed.</p>
+<pre><code class="language-rust noplayground">    pub fn put&lt;T: Into&lt;VCell&gt; + Clone&gt;(&amp;mut self, vcell: T) -&gt; VCell {
+        let vcell = vcell.into();
+        match &amp;vcell {
+            VCell::Ptr(_) =&gt; vcell,
+            VCell::Symbol(sym) =&gt; match self.symbol_table.get(sym.deref()) {
+                Some(ptr) =&gt; VCell::ptr(*ptr),
+                None =&gt; {
+                    let ptr = self.alloc();
+                    *self.heap.get_mut(ptr)
+                        .expect(&quot;heap index is out of bounds&quot;) = vcell.clone();
+                    self.symbol_table.insert(sym.deref().into(), ptr);
+                    VCell::ptr(ptr)
+                }
+            },
+            vcell =&gt; {
+                let ptr = self.alloc();
+                *self.heap.get_mut(ptr)
+                    .expect(&quot;heap index is out of bounds&quot;) = vcell.clone();
+                VCell::Ptr(ptr)
+            }
+        }
+    }
+</code></pre>
+<blockquote>
+<h4 id="symbol-interning"><a class="header" href="#symbol-interning">Symbol Interning</a></h4>
+<p>The heap provides symbol interning by use of Heap::symbol_table. On put of a symbol, the heap will check if the symbol already exists in the symbol table and will return the stored heap location if the symbol already exists.
+This results in the same symbols always having the same heap location in Marwood.
+Why is this useful? This allows various parts of Marwood to refer to symbols by their heap reference instead of the string.</p>
+</blockquote>
+<p>The <code>maybe_put</code> function acts as a wrapper around <code>put</code>, and will only put a VCell value if the value is one that must be boxed on a heap. Atom values such as numbers, bool, nil, etc are immutable values that may not always need to be boxed.</p>
+<pre><code class="language-rust noplayground">    pub fn maybe_put&lt;T: Into&lt;VCell&gt; + Clone&gt;(&amp;mut self, vcell: T) -&gt; VCell
+</code></pre>
+<h1 id="put--get-cell"><a class="header" href="#put--get-cell">Put &amp; Get Cell</a></h1>
+<p>The <code>put_cell</code> and <code>maybe_put_cell</code> are versions of <code>put</code> and <code>maybe_put</code> that recursively place a <code>Cell</code> structure on the heap. Aggregate structures such as pairs and vectors may end up allocating multiple heap slots to represent the structure in the heap.</p>
+<pre><code class="language-rust noplayground">    pub fn put_cell(&amp;mut self, ast: &amp;cell::Cell) -&gt; VCell
+    pub fn maybe_put_cell(&amp;mut self, ast: &amp;cell::Cell) -&gt; VCell
+</code></pre>
+<p>The following call to put_cell ends up allocating 10 slots on the heap to create the list structure and storage for values:</p>
+<pre><code class="language-rust noplayground">    let mut heap = Heap::new(8192);
+    heap.put_cell(&amp;parse!(&quot;(puppies 42.0 cats puppies #t)&quot;));
+</code></pre>
+<p>The chart below contains the resulting heap allocations for the storage of this list in the heap. Note that because puppies is an interned symbol at position $00 in the heap, both pairs that reference the value puppy point to the same heap position of $00.</p>
+<div class="table-wrapper"><table><thead><tr><th>Slot</th><th>Value</th></tr></thead><tbody>
+<tr><td>0</td><td>Symbol(puppies)</td></tr>
+<tr><td>1</td><td>Float(42.0)</td></tr>
+<tr><td>2</td><td>Symbol(cats)</td></tr>
+<tr><td>3</td><td>#t</td></tr>
+<tr><td>4</td><td>()</td></tr>
+<tr><td>5</td><td>($03 . $04)</td></tr>
+<tr><td>6</td><td>($00 . $05)</td></tr>
+<tr><td>7</td><td>($02 . $06)</td></tr>
+<tr><td>8</td><td>($01 . $07)</td></tr>
+<tr><td>9</td><td>($00 . $08)</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="global-environment"><a class="header" href="#global-environment">Global Environment</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="numbers"><a class="header" href="#numbers">Numbers</a></h1>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="mermaid.min.js"></script>
+        <script type="text/javascript" src="mermaid-init.js"></script>
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Heap - Crafting Marwood</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="title-page.html">Marwood</a></li><li class="chapter-item expanded "><a href="design-overview.html"><strong aria-hidden="true">1.</strong> Design Overview</a></li><li class="chapter-item expanded "><a href="parsing-printing-overview.html"><strong aria-hidden="true">2.</strong> Parsing & Printing</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="sexpr.html"><strong aria-hidden="true">2.1.</strong> S-Expressions</a></li><li class="chapter-item expanded "><a href="cell.html"><strong aria-hidden="true">2.2.</strong> Cell</a></li><li class="chapter-item expanded "><a href="tokenizing.html"><strong aria-hidden="true">2.3.</strong> Tokenizing</a></li><li class="chapter-item expanded "><a href="parsing.html"><strong aria-hidden="true">2.4.</strong> Parsing</a></li></ol></li><li class="chapter-item expanded "><a href="vm-overview.html"><strong aria-hidden="true">3.</strong> Virtual Machine</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="vcell.html"><strong aria-hidden="true">3.1.</strong> VCell</a></li><li class="chapter-item expanded "><a href="stack.html"><strong aria-hidden="true">3.2.</strong> Stack</a></li><li class="chapter-item expanded "><a href="heap.html" class="active"><strong aria-hidden="true">3.3.</strong> Heap</a></li><li class="chapter-item expanded "><a href="global-environment.html"><strong aria-hidden="true">3.4.</strong> Global Environment</a></li></ol></li><li class="chapter-item expanded "><a href="numbers.html"><strong aria-hidden="true">4.</strong> Numbers</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Crafting Marwood</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="heap"><a class="header" href="#heap">Heap</a></h1>
+<p>This small snippset of scheme is useful for reasoning about why scheme might need a heap:</p>
+<pre><code class="language-scheme">(define x 10)
+(define y (* x x ))
+(define animals '(cats otters puppies))
+(define sub-animals (cdr animals))
+</code></pre>
+<p>Both the value for x and y are bound to numbers. Mutating <code>x</code> and <code>y</code> only require changing what value the symbol is bound to in the environment.</p>
+<p>But, animals and sub-animals are a little more nuanced. animals is a list composed of <code>pairs</code> and <code>symbols</code>, and more importantly sub-animals refers to tail of the same list containing the values <code>'(otters puppies)</code>. That is, both <code>animals</code> and <code>sub-animals</code> refer to parts of the same data structure. Not a copy.</p>
+<p>If sub-animals were modified with <code>set-car!</code> or <code>set-cdr!</code>, the mutation must also be realized on the list that <code>animals</code> is bound to.</p>
+<p>One way of supporting this type of funcitonality is to store these shared values on a heap. <code>animals</code> and <code>sub-animals</code> can then contain references into the same data structure on a heap.</p>
+<h1 id="heap-structure"><a class="header" href="#heap-structure">Heap Structure</a></h1>
+<p>Like the stack, Marwood's heap is composed of a <code>Vec&lt;VCell&gt;</code>, along with various supporting structures used to track free slots, intern symbols, and garbage collection.</p>
+<pre><code class="language-rust noplayground">pub struct Heap {
+    chunk_size: usize,
+    free_list: Vec&lt;usize&gt;,
+    heap: Vec&lt;VCell&gt;,
+    heap_map: gc::Map,
+    symbol_table: HashMap&lt;String, usize&gt;,
+}
+</code></pre>
+<p><code>chunk_size</code> refers to the number of heap slots allocated when the heap needs to grow. On initialization, the Heap will allocate chunk_size slots initialized to VCell::Undefined, and add the index of each unused heap slot to <code>free_list</code>. This free list contains indexes on the heap of unused slots ready to be allocated.</p>
+<pre><code class="language-rust noplayground">    pub fn new(chunk_size: usize) -&gt; Heap {
+        Heap {
+            chunk_size,
+            heap: vec![VCell::undefined(); chunk_size],
+            free_list: (0..chunk_size).rev().into_iter().collect()
+        }
+    }
+</code></pre>
+<blockquote>
+<h4 id="heap-references"><a class="header" href="#heap-references">Heap References</a></h4>
+<p>References into Marwood's heap are of the type <code>type HeapRef = usize;</code> and are direct indexes into the heap. These heap references can be found in various places in Marwood's VCell and VM structures:</p>
+<ul>
+<li>VCell::Ptr(HeapRef)</li>
+<li>VCell::Pair(HeapRef, HeapRef)</li>
+<li>VCell::Closure(HeapRef, HeapRef)</li>
+</ul>
+</blockquote>
+<h1 id="alloc--free"><a class="header" href="#alloc--free">Alloc &amp; Free</a></h1>
+<p>The heap's core API is composed of alloc, free and get operations on the heap.</p>
+<pre><code class="language-rust noplayground">    pub fn grow(&amp;mut self)
+    pub fn alloc(&amp;mut self) -&gt; usize
+    pub fn free(&amp;mut self, ptr: usize)
+
+    pub fn get_at_index(&amp;self, ptr: usize) -&gt; &amp;VCell
+    pub fn get_at_index_mut(&amp;mut self, ptr: usize) -&gt; &amp;mut VCell
+    pub fn get&lt;'a, T: Into&lt;Cow&lt;'a, VCell&gt;&gt;&gt;(&amp;self, vcell: T) -&gt; VCell
+</code></pre>
+<p><code>alloc</code> returns the next available slot on the <code>free_list</code>, calling <code>grow</code> to grow the heap by <code>chunk_size</code> elements if the <code>free_list</code> is empty. The disposition of the slot is also marked as State::Allocated in the heap_map, which is used by Marwood's garbage collector and discussed in more detail in later sections.</p>
+<pre><code class="language-rust noplayground">    pub fn alloc(&amp;mut self) -&gt; usize {
+        match self.free_list.pop() {
+            None =&gt; {
+                self.grow();
+                self.alloc()
+            }
+            Some(ptr) =&gt; {
+                self.heap_map.set(ptr, State::Allocated);
+                ptr
+            }
+        }
+    }
+</code></pre>
+<p><code>free</code> returns a heap slot back to the <code>free_list</code>. The contents is set back to <code>VCell::Undefined</code>, which may help catch any bugs in Marwood where a heap reference is used when it no longer should be. </p>
+<p>The slot is also marked State::Free in the heap_map, a data structure used by Marwood's garbage collector.</p>
+<pre><code class="language-rust noplayground">    pub fn free(&amp;mut self, ptr: usize) {
+        self.heap_map.set(ptr, State::Free);
+        if let Some(VCell::Symbol(sym)) = self.heap.get(ptr) {
+            self.symbol_table.remove(&amp;**sym);
+        }
+        *self.heap.get_mut(ptr).unwrap() = VCell::Undefined;
+        self.free_list.push(ptr);
+    }
+</code></pre>
+<p>The core get operations on the heap are not notable, except that the get functions will panic if given an index that is not valid for the current heap. </p>
+<p>The function <code>get</code> acts as a wrapper around <code>get_at_index</code> and only performs a heap lookup if the supplied vcell is a pointer type. This allows code in Marwood to access values on the stack or environment slots without having to check of the value is a reference first.</p>
+<pre><code class="language-rust noplayground">    pub fn get_at_index(&amp;self, ptr: usize) -&gt; &amp;VCell {
+        self.heap.get(ptr).expect(&quot;heap index out of bounds&quot;)
+    }
+
+    pub fn get_at_index_mut(&amp;mut self, ptr: usize) -&gt; &amp;mut VCell {
+        self.heap.get_mut(ptr).expect(&quot;heap index out of bounds&quot;)
+    }
+
+    pub fn get&lt;'a, T: Into&lt;Cow&lt;'a, VCell&gt;&gt;&gt;(&amp;self, vcell: T) -&gt; VCell {
+        match vcell.into() {
+            Cow::Borrowed(vcell) =&gt; match vcell {
+                VCell::Ptr(ptr) =&gt; self.get_at_index(*ptr).clone(),
+                vcell =&gt; vcell.clone(),
+            },
+            Cow::Owned(vcell) =&gt; match vcell {
+                VCell::Ptr(ptr) =&gt; self.get_at_index(ptr).clone(),
+                vcell =&gt; vcell,
+            },
+        }
+    }
+</code></pre>
+<h1 id="put"><a class="header" href="#put">Put</a></h1>
+<p>The <code>put</code> function puts the supplied vcell on the next available slot on the heap returned by <code>alloc</code>. If vcell was already a pointer type, then it's returned instead of being double boxed by the heap. This removes the need for a lot of boxing code in Marwood to check if the value it's boxing is already boxed.</p>
+<pre><code class="language-rust noplayground">    pub fn put&lt;T: Into&lt;VCell&gt; + Clone&gt;(&amp;mut self, vcell: T) -&gt; VCell {
+        let vcell = vcell.into();
+        match &amp;vcell {
+            VCell::Ptr(_) =&gt; vcell,
+            VCell::Symbol(sym) =&gt; match self.symbol_table.get(sym.deref()) {
+                Some(ptr) =&gt; VCell::ptr(*ptr),
+                None =&gt; {
+                    let ptr = self.alloc();
+                    *self.heap.get_mut(ptr)
+                        .expect(&quot;heap index is out of bounds&quot;) = vcell.clone();
+                    self.symbol_table.insert(sym.deref().into(), ptr);
+                    VCell::ptr(ptr)
+                }
+            },
+            vcell =&gt; {
+                let ptr = self.alloc();
+                *self.heap.get_mut(ptr)
+                    .expect(&quot;heap index is out of bounds&quot;) = vcell.clone();
+                VCell::Ptr(ptr)
+            }
+        }
+    }
+</code></pre>
+<blockquote>
+<h4 id="symbol-interning"><a class="header" href="#symbol-interning">Symbol Interning</a></h4>
+<p>The heap provides symbol interning by use of Heap::symbol_table. On put of a symbol, the heap will check if the symbol already exists in the symbol table and will return the stored heap location if the symbol already exists.
+This results in the same symbols always having the same heap location in Marwood.
+Why is this useful? This allows various parts of Marwood to refer to symbols by their heap reference instead of the string.</p>
+</blockquote>
+<p>The <code>maybe_put</code> function acts as a wrapper around <code>put</code>, and will only put a VCell value if the value is one that must be boxed on a heap. Atom values such as numbers, bool, nil, etc are immutable values that may not always need to be boxed.</p>
+<pre><code class="language-rust noplayground">    pub fn maybe_put&lt;T: Into&lt;VCell&gt; + Clone&gt;(&amp;mut self, vcell: T) -&gt; VCell
+</code></pre>
+<h1 id="put--get-cell"><a class="header" href="#put--get-cell">Put &amp; Get Cell</a></h1>
+<p>The <code>put_cell</code> and <code>maybe_put_cell</code> are versions of <code>put</code> and <code>maybe_put</code> that recursively place a <code>Cell</code> structure on the heap. Aggregate structures such as pairs and vectors may end up allocating multiple heap slots to represent the structure in the heap.</p>
+<pre><code class="language-rust noplayground">    pub fn put_cell(&amp;mut self, ast: &amp;cell::Cell) -&gt; VCell
+    pub fn maybe_put_cell(&amp;mut self, ast: &amp;cell::Cell) -&gt; VCell
+</code></pre>
+<p>The following call to put_cell ends up allocating 10 slots on the heap to create the list structure and storage for values:</p>
+<pre><code class="language-rust noplayground">    let mut heap = Heap::new(8192);
+    heap.put_cell(&amp;parse!(&quot;(puppies 42.0 cats puppies #t)&quot;));
+</code></pre>
+<p>The chart below contains the resulting heap allocations for the storage of this list in the heap. Note that because puppies is an interned symbol at position $00 in the heap, both pairs that reference the value puppy point to the same heap position of $00.</p>
+<div class="table-wrapper"><table><thead><tr><th>Slot</th><th>Value</th></tr></thead><tbody>
+<tr><td>0</td><td>Symbol(puppies)</td></tr>
+<tr><td>1</td><td>Float(42.0)</td></tr>
+<tr><td>2</td><td>Symbol(cats)</td></tr>
+<tr><td>3</td><td>#t</td></tr>
+<tr><td>4</td><td>()</td></tr>
+<tr><td>5</td><td>($03 . $04)</td></tr>
+<tr><td>6</td><td>($00 . $05)</td></tr>
+<tr><td>7</td><td>($02 . $06)</td></tr>
+<tr><td>8</td><td>($01 . $07)</td></tr>
+<tr><td>9</td><td>($00 . $08)</td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="stack.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="global-environment.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="stack.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="global-environment.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript" src="mermaid.min.js"></script>
+        <script type="text/javascript" src="mermaid-init.js"></script>
+    </body>
+</html>
